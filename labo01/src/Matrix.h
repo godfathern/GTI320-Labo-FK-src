@@ -5,9 +5,9 @@
  *
  * @brief Implémentation de matrices simples.
  *
- * Nom:
- * Code permanent :
- * Email :
+ * Nom: Phan Tung Bui
+ * Code permanent : BUIP26109708
+ * Email :phan-tung.bui.1@ens.etsmtl.ca
  *
  */
 
@@ -63,6 +63,20 @@ namespace gti320
             // TODO copier les données de la sous-matrice.
             //   Note : si les dimensions ne correspondent pas, la matrice doit être redimensionnée.
             //   Vous pouvez présumer qu'il s'agit d'un stockage par colonnes.
+            int rows = submatrix.rows();
+            int columns = submatrix.cols();
+            //Question : On n a pas implementation de SubMatrix. Est ce que ca est la bonne facon de get
+            //rows et columns????
+
+            if (this->rows() != rows || this->cols() != columns) {
+                this->resize(rows, columns);
+            }
+            //Wtf : no matter what i change here, test still coming out right
+            for (int i = 0; i < columns; ++i ) {
+                for (int j = 0; j < rows; ++j) {
+                    (*this)(j, i) = submatrix(i, j);
+                }
+            }
             return *this;
         }
 
@@ -72,7 +86,8 @@ namespace gti320
         _Scalar operator()(int i, int j) const
         {
             // TODO implementer
-            return (double)(i + j);
+            int rows = this->rows();
+            return this->m_storage[i + j * rows];
         }
 
         /**
@@ -82,8 +97,8 @@ namespace gti320
         {
             // TODO implementer
             //      Indice : l'implémentation est identique à celle de la fonction précédente.
-            _Scalar x = (double)(i + j);
-            return x;
+            int rows = this->rows();
+            return this->m_storage[i + j * rows];
         }
 
         /**
@@ -110,9 +125,18 @@ namespace gti320
         Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage> transpose() const
         {
             // TODO calcule et retourne la transposée de la matrice.
+            const int cols = this->cols();
+            const int rows = this->rows();
+            Matrix <_OtherScalar,  _OtherRows,  _OtherCols, _OtherStorage> matrixT(cols, rows);
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    matrixT(j,i) = (*this)(i,j);
+                }
 
-            return  Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage>(); // pas bon, à changer
+            }
+            return  matrixT;
         }
+
 
         /**
          * Affecte l'identité à la matrice
@@ -121,6 +145,13 @@ namespace gti320
         {
             // TODO affecter la valeur 0.0 partour, sauf sur la diagonale principale où c'est 1.0..
             //      Votre implémentation devrait aussi fonctionner pour des matrices qui ne sont pas carrées.
+            this->setZero();
+            int rows = this->rows();
+            int cols = this->cols();
+            int diag = (rows <= cols) ? rows : cols;
+            for (int i  = 0; i < diag ; ++i) {
+                (*this)(i,i) = 1.0;
+            }
         }
 
     };
@@ -166,6 +197,20 @@ namespace gti320
             // TODO copier les données de la sous-matrice.
             //   Note : si les dimensions ne correspondent pas, la matrice doit être redimensionnée.
             //   Vous pouvez présumer qu'il s'agit d'un stockage par lignes.
+
+            int rows = submatrix.rows();
+            int cols = submatrix.cols();
+
+            if (this->rows() != rows || this->cols() != cols) {
+                this->resize(rows, cols);
+            }
+
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    (*this)(i,j) = submatrix(i,j);
+                }
+
+            }
             return *this;
         }
 
@@ -175,7 +220,8 @@ namespace gti320
         _Scalar operator()(int i, int j) const
         {
             // TODO implementer
-            return 0.0;
+            int cols = this->cols();
+            return this->m_storage[i*cols + j];
         }
 
         /**
@@ -184,8 +230,8 @@ namespace gti320
         _Scalar& operator()(int i, int j)
         {
             // TODO implementer
-            _Scalar x = 0.0;
-            return x;
+            int cols = this->cols();
+            return this->m_storage[i*cols + j];
         }
 
         /**
@@ -211,8 +257,16 @@ namespace gti320
         {
             // TODO calcule et retourne la transposée de la matrice.
             //    Optimisez cette fonction en tenant compte du type de stockage utilisé.
+            const int rows = this->rows();
+            const int cols = this->cols();
+            Matrix<_Scalar, _ColsAtCompile, _RowsAtCompile, ColumnStorage> matrixT (cols, rows);
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    matrixT(j, i) = (*this)(i, j);
+                }
+            }
 
-            return Matrix<_Scalar, _ColsAtCompile, _RowsAtCompile, ColumnStorage>();
+            return matrixT;
         }
 
         /**
@@ -222,6 +276,13 @@ namespace gti320
         {
             // TODO affecter la valeur 0.0 partour, sauf sur la diagonale principale où c'est 1.0..
             //      Votre implémentation devrait aussi fonctionner pour des matrices qui ne sont pas carrées.
+            int rows = this->rows();
+            int cols = this->cols();
+            int diag = (rows < cols) ? rows : cols;
+            this->setZero();
+            for (int i = 0; i < diag; ++i) {
+                (*this)(i,i) = 1.0;
+            }
         }
 
     };
