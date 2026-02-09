@@ -1,0 +1,86 @@
+############################################
+# Build directories (CMake / CLion)
+############################################
+cmake-build-*/
+build/
+out/
+
+############################################
+# CMake generated files
+############################################
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+CTestTestfile.cmake
+Testing/
+*.cmake.check_cache
+*.cmake.verify_globs
+
+############################################
+# CLion / JetBrains
+############################################
+.idea/
+.idea_modules/
+*.iml
+.clion.source.upload.marker
+
+############################################
+# Ninja
+############################################
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+############################################
+# Dependencies fetched by CMake (FetchContent)
+############################################
+_deps/
+
+############################################
+# Compiled binaries & libraries
+############################################
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+labo_fk/main
+labo01/main
+
+############################################
+# macOS
+############################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+############################################
+# Debug / runtime junk
+############################################
+*.log
+*.out
+*.err
+*.stackdump
+
+############################################
+# Temporary / editor backups
+############################################
+*~
+*.swp
+*.swo
+*.tmp
+
+############################################
+# Coverage / profiling (if ever enabled)
+############################################
+*.gcda
+*.gcno
+*.gcov
