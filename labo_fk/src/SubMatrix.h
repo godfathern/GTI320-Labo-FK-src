@@ -75,6 +75,14 @@ namespace gti320
             // TODO Copie les valeurs de la matrice dans la sous-matrice.
             //      Note les dimensions de la matrice doivent correspondre à celle de
             //      la sous-matrice.
+            assert (m_rows == matrix.rows() && m_cols == matrix.cols());
+
+            for (int j = 0; j < m_cols; ++j) {
+                for (int i = 0; i < m_rows; ++i) {
+                    (*this)(i,j) = matrix(i,j);
+                }
+            }
+
             return *this;
         }
 
@@ -87,7 +95,9 @@ namespace gti320
         _Scalar operator()(int i, int j) const
         {
             // TODO implémenter
-            return 0.0;
+            assert(i < m_rows && j < m_cols && i >= 0 && j >= 0);
+            return m_matrix(m_i+i,m_j+j);
+
         }
 
         /**
@@ -99,8 +109,8 @@ namespace gti320
         _Scalar& operator()(int i, int j)
         {
             // TODO implémenter
-            _Scalar x = 0.0;
-            return x;
+            assert(i < m_rows && j < m_cols && i >= 0 && j >= 0);
+            return m_matrix(m_i+i,m_j+j);
         }
 
         /**
@@ -110,7 +120,15 @@ namespace gti320
         Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage> transpose() const
         {
             // TODO implémenter
-            return Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage>();
+            if constexpr (_OtherRows != Dynamic) { assert(_OtherRows == m_cols); }
+            if constexpr (_OtherCols != Dynamic) { assert(_OtherCols == m_rows); }
+            Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage> result(m_cols, m_rows);
+            for (int i = 0; i < m_rows; ++i) {
+                for (int j = 0; j < m_cols; ++j) {
+                    result(j,i) =  static_cast<_OtherScalar>((*this)(i,j)); //static_cast : convertir le resultat en _OtherScalar type (float,int..)
+                }
+            }
+            return result;
         }
 
 		/**
@@ -120,6 +138,14 @@ namespace gti320
         SubMatrix<_Scalar, _RowsAtCompile, _ColsAtCompile, _StorageType>& operator+=(const Matrix<_Scalar, _OtherRows, _OtherCols, _OtherStorageType>& rhs)
         {
         	// TODO mettre à jour les valeurs dans la matrice originale en ajoutant @a rhs.
+            assert(rhs.rows() == m_rows && rhs.cols() == m_cols);
+
+            for (int i = 0; i < m_rows; ++i) {
+                for (int j = 0; j < m_cols; ++j) {
+                    (*this)(i,j) += rhs(i,j);
+                }
+            }
+
             return *this;
         }
 
@@ -130,6 +156,17 @@ namespace gti320
         operator Matrix< _Scalar, _OtherRows, _OtherCols, _OtherStorageType>()
         {
         	// TODO implémenter
+            if constexpr (_OtherRows != Dynamic) { assert(_OtherRows == m_rows); }
+            if constexpr (_OtherCols != Dynamic) { assert(_OtherCols == m_cols); }
+            Matrix< _Scalar, _OtherRows, _OtherCols, _OtherStorageType> result(m_rows, m_cols);
+            for (int i = 0; i < m_rows; ++i) {
+                for (int j = 0; j < m_cols; ++j) {
+                    result(i,j) = (*this)(i,j);
+                }
+            }
+            return result;
+
+
         }
 
         inline int rows() const { return m_rows; }
