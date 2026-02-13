@@ -65,16 +65,14 @@ namespace gti320
             //   Vous pouvez présumer qu'il s'agit d'un stockage par colonnes.
             int rows = submatrix.rows();
             int columns = submatrix.cols();
-            //Question : On n a pas implementation de SubMatrix. Est ce que ca est la bonne facon de get
-            //rows et columns????
 
             if (this->rows() != rows || this->cols() != columns) {
                 this->resize(rows, columns);
             }
-            //Wtf : no matter what i change here, test still coming out right
+
             for (int i = 0; i < columns; ++i ) {
                 for (int j = 0; j < rows; ++j) {
-                    (*this)(j, i) = submatrix(i, j);
+                    (*this)(i, j) = submatrix(i, j);
                 }
             }
             return *this;

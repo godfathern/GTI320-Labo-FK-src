@@ -67,56 +67,52 @@ namespace gti320 {
     inline Matrix4f Matrix4f::inverse() const
     {
         // TODO : impl�menter
-        // A reviser
-        Matrix4f inv;
-        inv.setIdentity();
+        //Matrice de rotation
+        Matrix3f R = (*this).block(0,0,3,3);
+        //Transposee de matrice de rotation
+        Matrix3f RT = R.transpose<float, 3, 3, ColumnStorage>();
+        //Matricde de transalation
+        Vector3f t(3);
 
-        // Extraire R (3x3) et t (3x1)
-        Matrix3f R;
+        Matrix4f result;
+
+        //Calculer la matrice de translation
+        for (int i = 0; i < 3; ++i) {
+            t(i) = (*this)(i,3);
+        }
+
+        //Calculer -RT * t
+        Vector3f RTt;
+
+        for (int i = 0; i < 3; ++i)
+        {
+            float acc = 0.0f;
+
+            for (int k = 0; k < 3; ++k)
+            {
+                acc += RT(i, k) * t(k);
+            }
+
+            RTt(i) = -acc;
+        }
+
+        //Fill in the 0 0 0 1
+        for (int j = 0; j < 4; ++j) {
+            result(3,j) = (j != 3) ? 0.0f : 1.0f;
+        }
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                R(i, j) = (*this)(i, j);
+                result(i,j) = RT(i,j);
             }
         }
 
-        Vector3f t;
-        t(0) = (*this)(0, 3);
-        t(1) = (*this)(1, 3);
-        t(2) = (*this)(2, 3);
+        for (int i = 0; i < 3; ++i){
+            result(i,3) = RTt(i);
 
-        // R^T
-        Matrix3f Rt;
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                Rt(i, j) = R(j, i);
-            }
         }
 
-        // Placer Rt dans inv
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                inv(i, j) = Rt(i, j);
-            }
-        }
-
-        // Calculer -Rt * t
-        Vector3f negRtt;
-        for (int i = 0; i < 3; ++i) {
-            float s = 0.0f;
-            for (int k = 0; k < 3; ++k) {
-                s += Rt(i, k) * t(k);
-            }
-            negRtt(i) = -s;
-        }
-
-        inv(0, 3) = negRtt(0);
-        inv(1, 3) = negRtt(1);
-        inv(2, 3) = negRtt(2);
-
-        // Dernière ligne (0 0 0 1)
-        inv(3, 0) = 0.0f; inv(3, 1) = 0.0f; inv(3, 2) = 0.0f; inv(3, 3) = 1.0f;
-
-        return inv;
+        return result;
     }
     
     /**
