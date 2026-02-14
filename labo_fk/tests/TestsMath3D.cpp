@@ -114,7 +114,7 @@ TEST(TestsMath3D, TransformInverse)
     EXPECT_NEAR(-0.276058108f, Minv(1, 2), 1e-6f);
     EXPECT_NEAR(0.833032429f, Minv(2, 2), 1e-6f);
     EXPECT_NEAR(0.0f, Minv(3, 2), 1e-6f);
-    EXPECT_NEAR(20.1451187f, Minv(0, 3), 1e-6f);
+    EXPECT_NEAR(20.14512f, Minv(0, 3), 1e-6f);
     EXPECT_NEAR(8.45836353f, Minv(1, 3), 1e-6f);
     EXPECT_NEAR(7.91455984f, Minv(2, 3), 1e-6f);
     EXPECT_NEAR(1.0f, Minv(3, 3), 1e-6f);
