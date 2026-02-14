@@ -120,7 +120,7 @@ namespace gti320
         Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage> transpose() const
         {
             // TODO implémenter
-            if constexpr (_OtherRows != Dynamic) { assert(_OtherRows == m_cols); }
+            if constexpr (_OtherRows != Dynamic) { assert(_OtherRows == m_cols); } //constexpr : force de run ce de code durant compilation
             if constexpr (_OtherCols != Dynamic) { assert(_OtherCols == m_rows); }
             Matrix<_OtherScalar, _OtherRows, _OtherCols, _OtherStorage> result(m_cols, m_rows);
             for (int i = 0; i < m_rows; ++i) {

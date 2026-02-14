@@ -72,7 +72,7 @@ namespace gti320 {
         //Transposee de matrice de rotation
         Matrix3f RT = R.transpose<float, 3, 3, ColumnStorage>();
         //Matricde de transalation
-        Vector3f t(3);
+        Vector3f t;
 
         Matrix4f result;
 
@@ -125,11 +125,8 @@ namespace gti320 {
     {
         // TODO : impl�menter
         Matrix3f Rt;
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                Rt(i, j) = (*this)(j, i);
-            }
-        }
+        Rt = (*this).transpose<float, 3, 3, ColumnStorage>(); // Matrice de rotation => Orthogonale =>  inverse = transpose
+
         return Rt;
     }
 
@@ -167,13 +164,13 @@ namespace gti320 {
     static Matrix<_Scalar, 3, 3> makeRotation(_Scalar x, _Scalar y, _Scalar z)
     {
         // TODO : impl�menter
-        //Diapo 29
+        //Diapo 17
         const _Scalar cos_x = cos(x), sin_x = sin(x);
         const _Scalar cos_y = cos(y), sin_y = sin(y);
         const _Scalar cos_z = cos(z), sin_z = sin(z);
 
         Matrix<_Scalar, 3, 3> Rx, Ry, Rz;
-
+        //Diapo 16 + 29
         // Rx
         Rx(0,0)=1;  Rx(0,1)=0;      Rx(0,2)=0;
         Rx(1,0)=0;  Rx(1,1)=cos_x;  Rx(1,2)=-sin_x;
